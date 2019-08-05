@@ -15,6 +15,11 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('table')->comment('标题');
+            $table->text('description')->comment('商品详情');
+            $table->string('image')->comment('封面图片');
+            $table->boolean('on_sale')->default(true)->comment('商品是否正在售卖');
+            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }
