@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
-        'title', 'description', 'image', 'on_sale', 'price'
+        'table', 'description', 'image', 'on_sale', 'price'
     ];
     protected $casts = [
         'on_sale' => 'boolean', // on_sale 是一个布尔类型的字段
@@ -15,5 +15,9 @@ class Product extends Model
 
     public function Skus(){
         return $this->hasMany(ProductSku::class);
+    }
+
+    public function shop(){
+        return $this->belongsTo(Shop::class);
     }
 }

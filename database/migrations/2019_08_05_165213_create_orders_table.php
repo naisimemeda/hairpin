@@ -18,6 +18,7 @@ class CreateOrdersTable extends Migration
             $table->string('no')->unique()->comment('订单号');
             $table->unsignedBigInteger('product_id')->comment('商品id');
             $table->unsignedBigInteger('product_sku_id')->comment('sku');
+            $table->unsignedBigInteger('shop_id')->comment('商家id');
             $table->string('email');
             $table->string('phone');
             $table->unsignedInteger('amount')->comment('数量');

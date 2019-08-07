@@ -9,12 +9,14 @@
     "license": "MIT",
     "require": {
         "php": "^7.1.3",
-        "encore/laravel-admin": "1.6.11",
         "fideloper/proxy": "^4.0",
         "jxlwqq/simditor": "^1.0",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
+        "niceyo/xhy-sms": "^1.0",
         "overtrue/laravel-lang": "^3.0",
+        "predis/predis": "^1.1",
+        "tymon/jwt-auth": "1.0.0-rc.4.1",
         "yansongda/pay": "^2.8"
     },
     "require-dev": {
