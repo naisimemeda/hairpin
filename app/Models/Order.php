@@ -6,6 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    const REFUND_STATUS_PENDING = 'pending';
+    const REFUND_STATUS_APPLIED = 'applied';
+    const REFUND_STATUS_SUCCESS = 'success';
+    const REFUND_STATUS_FAILED  = 'failed';
+
+    public static $refundStatusMap = [
+        self::REFUND_STATUS_PENDING    => '未退款',
+        self::REFUND_STATUS_APPLIED    => '已申请退款',
+        self::REFUND_STATUS_SUCCESS    => '退款成功',
+        self::REFUND_STATUS_FAILED     => '退款失败',
+    ];
+
+
     protected $fillable = [
         'no', 'email', 'phone', 'total_amount', 'remark',
         'product_id', 'product_sku_id', 'amount',
@@ -53,5 +66,9 @@ class Order extends Model
 
     public function productSku(){
         return $this->belongsTo(ProductSku::class);
+    }
+
+    public function shop(){
+        return $this->belongsTo(Shop::class);
     }
 }

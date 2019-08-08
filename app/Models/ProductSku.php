@@ -21,4 +21,8 @@ class ProductSku extends Model
         }
         return $this->where('id', $this->id)->where('stock', '>=', $amount)->decrement('stock', $amount);
     }
+
+    public function card(){
+        return $this->hasMany(Card::class);
+    }
 }

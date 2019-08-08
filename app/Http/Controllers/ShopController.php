@@ -100,6 +100,7 @@ class ShopController extends Controller
 
         // 清除验证码缓存
         Cache::forget($request->verification_key);
+
         $token = Auth::guard('shop')->login($shop);
 
         return $this->setStatusCode(201)->success([

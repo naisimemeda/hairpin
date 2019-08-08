@@ -31,6 +31,10 @@ class OrderRequest extends FormRequest
             'amount' => ['required', 'integer', 'min:1'],
             'email'  => 'email',
             'phone'  => 'required',
+            'shop_id'  => [
+                'required',
+                Rule::exists('shops', 'id')->where('id', $this->input('shop_id')),
+            ],
         ];
     }
 }

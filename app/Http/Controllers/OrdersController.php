@@ -7,6 +7,7 @@ use App\Exceptions\InvalidRequestException;
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Models\ProductSku;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
@@ -31,11 +32,12 @@ class OrdersController extends Controller
                 ]);
                 $order->product()->associate($sku->product_id);
                 $order->productSku()->associate($sku);
+                $order->shop()->associate($request->input('shop_id'));
                 $order->save();
             });
         }catch (\Exception $exception){
             throw new InternalException('系统内部错误');
         }
-
+        return $this->setStatusCode(201)->success('成功');
     }
 }

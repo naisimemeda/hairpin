@@ -13,7 +13,7 @@ class Shop extends Authenticatable implements JWTSubject
     use Notifiable;
 
     protected $fillable = [
-        'name', 'phone', 'email', 'password', 'status', 'avatar'
+        'name', 'phone', 'email', 'password', 'status', 'avatar', 'money'
     ];
 
     protected $hidden = [
@@ -45,5 +45,9 @@ class Shop extends Authenticatable implements JWTSubject
 
     public static function ShopInfo(){
         return Auth::guard('shop')->user();
+    }
+
+    public function card(){
+        return $this->hasMany(Card::class);
     }
 }

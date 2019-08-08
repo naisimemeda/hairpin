@@ -13,6 +13,7 @@ class ProductRequest extends FormRequest
             'description'  => ['required'],
             'image'  => ['required'],
             'skus'  => ['required', 'array'],
+            'explain' => ['required'],
             'skus.*' => [ // 检查 skus 数组下每一个子数组的参数
                 'required',
                 function ($attribute, $value, $fail) {

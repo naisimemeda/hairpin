@@ -21,6 +21,8 @@ class CreateShopsTable extends Migration
             $table->string('email')->nullable();
             $table->integer('status')->default(1);
             $table->string('avatar')->nullable();
+            $table->string('notice')->nullable();
+            $table->decimal('money', 10, 2)->default(0);
             $table->timestamps();
         });
     }

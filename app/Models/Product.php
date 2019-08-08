@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
-        'table', 'description', 'image', 'on_sale', 'price'
+        'table', 'description', 'image', 'on_sale', 'price', 'explain'
     ];
     protected $casts = [
         'on_sale' => 'boolean', // on_sale 是一个布尔类型的字段

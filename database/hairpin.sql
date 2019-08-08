@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 07/08/2019 11:53:16
+ Date: 08/08/2019 11:34:57
 */
 
 SET NAMES utf8mb4;
@@ -358,17 +358,18 @@ CREATE TABLE `migrations`  (
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of migrations
 -- ----------------------------
 INSERT INTO `migrations` VALUES (1, '2014_10_12_000000_create_users_table', 1);
 INSERT INTO `migrations` VALUES (2, '2014_10_12_100000_create_password_resets_table', 1);
-INSERT INTO `migrations` VALUES (3, '2019_08_05_073653_create_products_table', 1);
-INSERT INTO `migrations` VALUES (4, '2019_08_05_074056_create_product_skus_table', 1);
 INSERT INTO `migrations` VALUES (5, '2016_01_04_173148_create_admin_tables', 2);
-INSERT INTO `migrations` VALUES (7, '2019_08_05_165213_create_orders_table', 3);
+INSERT INTO `migrations` VALUES (11, '2019_08_05_073653_create_products_table', 3);
+INSERT INTO `migrations` VALUES (12, '2019_08_05_074056_create_product_skus_table', 3);
+INSERT INTO `migrations` VALUES (13, '2019_08_05_165213_create_orders_table', 3);
+INSERT INTO `migrations` VALUES (14, '2019_08_07_114907_create_shops_table', 3);
 
 -- ----------------------------
 -- Table structure for orders
@@ -379,8 +380,9 @@ CREATE TABLE `orders`  (
   `no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单号',
   `product_id` bigint(20) UNSIGNED NOT NULL COMMENT '商品id',
   `product_sku_id` bigint(20) UNSIGNED NOT NULL COMMENT 'sku',
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `shop_id` bigint(20) UNSIGNED NOT NULL COMMENT '商家id',
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount` int(10) UNSIGNED NOT NULL COMMENT '数量',
   `total_amount` decimal(10, 2) NOT NULL,
   `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单备注',
@@ -391,14 +393,12 @@ CREATE TABLE `orders`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `orders_no_unique`(`no`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of orders
 -- ----------------------------
-INSERT INTO `orders` VALUES (1, '20190805173215223387', 1, 1, '2514430140@qq.com', '18584864076', 1, 10000.00, '123123备注', NULL, NULL, NULL, '2019-08-05 17:32:15', '2019-08-05 17:32:15');
-INSERT INTO `orders` VALUES (2, '20190805175318129319', 1, 1, '2514430140@qq.com', '18584864076', 1, 10000.00, '123123备注', NULL, NULL, NULL, '2019-08-05 17:53:18', '2019-08-05 17:53:18');
-INSERT INTO `orders` VALUES (3, '20190805181154872462', 2, 2, '2514430140@qq.com', '18584864076', 1, 10.00, '123123备注', NULL, NULL, NULL, '2019-08-05 18:11:54', '2019-08-05 18:11:54');
+INSERT INTO `orders` VALUES (1, '20190808101543176139', 3, 3, 1, '2514430140@qq.com', '18584864076', 1, 100.00, '123123备注', NULL, NULL, NULL, '2019-08-08 10:15:43', '2019-08-08 10:15:43');
 
 -- ----------------------------
 -- Table structure for password_resets
@@ -427,14 +427,17 @@ CREATE TABLE `product_skus`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `product_skus_product_id_foreign`(`product_id`) USING BTREE,
   CONSTRAINT `product_skus_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product_skus
 -- ----------------------------
-INSERT INTO `product_skus` VALUES (1, 'IPhone X  一台', '优惠价', 10000.00, 0, 1, '2019-08-05 15:57:40', '2019-08-05 17:53:18');
-INSERT INTO `product_skus` VALUES (2, 'IPhone X  一台', '新品', 10.00, 49, 2, '2019-08-05 16:24:19', '2019-08-05 18:11:54');
-INSERT INTO `product_skus` VALUES (3, 'iPhone Xs', '123123', 10000.00, 0, 1, '2019-08-05 16:51:23', '2019-08-05 18:02:13');
+INSERT INTO `product_skus` VALUES (3, 'Iphone X', '苹果手机', 100.00, 99, 3, '2019-08-07 17:43:46', '2019-08-08 10:15:43');
+INSERT INTO `product_skus` VALUES (4, 'Ipohen 8', 'Ipohen 8 xixiixixix', 1000.00, 1000, 3, '2019-08-07 17:43:46', '2019-08-07 17:43:46');
+INSERT INTO `product_skus` VALUES (5, 'Iphone X', '苹果手机', 100.00, 100, 4, '2019-08-07 17:50:05', '2019-08-07 17:50:05');
+INSERT INTO `product_skus` VALUES (6, 'Ipohen 8', 'Ipohen 8 xixiixixix', 1000.00, 1000, 4, '2019-08-07 17:50:05', '2019-08-07 17:50:05');
+INSERT INTO `product_skus` VALUES (7, 'Iphone X', '苹果手机', 100.00, 100, 5, '2019-08-07 17:50:21', '2019-08-07 17:50:21');
+INSERT INTO `product_skus` VALUES (8, 'Ipohen 8', 'Ipohen 8 xixiixixix', 1000.00, 1000, 5, '2019-08-07 17:50:21', '2019-08-07 17:50:21');
 
 -- ----------------------------
 -- Table structure for products
@@ -445,18 +448,43 @@ CREATE TABLE `products`  (
   `table` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '商品详情',
   `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '封面图片',
+  `sold_count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '销量',
+  `shop_id` bigint(20) UNSIGNED NOT NULL COMMENT '商家id',
   `on_sale` tinyint(1) NOT NULL DEFAULT 1 COMMENT '商品是否正在售卖',
   `price` decimal(10, 2) NOT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of products
 -- ----------------------------
-INSERT INTO `products` VALUES (1, 'images/IMG_7112.JPG', '<p>123123</p>', 'images/IMG_7112.JPG', 1, 10000.00, '2019-08-05 15:57:40', '2019-08-05 15:57:40');
-INSERT INTO `products` VALUES (2, '312323', '<p>3123</p>', 'images/05d5c2ec8ce1dd268459a8ed0550ed42.JPG', 1, 10.00, '2019-08-05 16:24:19', '2019-08-05 16:40:39');
+INSERT INTO `products` VALUES (3, '苹果 IPhone', 'xxxx情', 'www.baidu.com/eqweqw', 0, 1, 0, 100.00, '2019-08-07 17:43:46', '2019-08-08 11:15:44');
+INSERT INTO `products` VALUES (4, '苹果手机哟', '详情', 'www.baidu.com', 0, 1, 1, 100.00, '2019-08-07 17:50:05', '2019-08-07 17:50:05');
+INSERT INTO `products` VALUES (5, '苹果手机哟', '详情', 'www.baidu.com', 0, 1, 1, 100.00, '2019-08-07 17:50:21', '2019-08-07 17:50:21');
+
+-- ----------------------------
+-- Table structure for shops
+-- ----------------------------
+DROP TABLE IF EXISTS `shops`;
+CREATE TABLE `shops`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '商家名称',
+  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of shops
+-- ----------------------------
+INSERT INTO `shops` VALUES (1, 'naisi', '18584864076', '$2y$10$ZFyPNhogGhaPg42OsEyDW.LLLka/zIGlnJRsD3iy/MuB0wyt4RWHq', NULL, 1, NULL, '2019-08-07 17:16:56', '2019-08-07 17:16:56');
 
 -- ----------------------------
 -- Table structure for users
