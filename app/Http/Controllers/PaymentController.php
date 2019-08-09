@@ -63,19 +63,22 @@ class PaymentController extends Controller
         if(!$card){
             return $this->failed('已无库存', 401);
         }
-        $card->update([
-            'status' => false
-        ]);
-        try {
-            $xhySms->send($order->phone,  [
-                'template' => 'SMS_163853034',
-                'data' => [
-                    'code' => 1234
-                ]
-            ], 'aliyun');
-        } catch (\Exception $exception) {
-            throw new InvalidRequestException('短信发送失败');
-        }
+
+        \DB::transaction(function () use ($card, $xhySms, $order) {
+            $card->update([
+                'status' => false
+            ]);
+            try {
+                $xhySms->send($order->phone,  [
+                    'template' => 'SMS_163853034',
+                    'data' => [
+                        'code' => 1234
+                    ]
+                ], 'aliyun');
+            } catch (\Exception $exception) {
+                throw new InvalidRequestException('短信发送失败');
+            }
+        });
 
         return app('alipay')->success();
     }

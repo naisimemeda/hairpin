@@ -33,7 +33,7 @@ class CardController extends Controller
             $builder->where('card_no', 'like', $like);
         }
 
-        $result =  $builder->get();
+        $result =  $builder->paginate(16);
         return $this->setStatusCode(201)->success($result);
     }
 

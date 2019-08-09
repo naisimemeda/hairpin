@@ -30,11 +30,11 @@ class Card extends Model
     {
         // 不同的排序，使用不同的数据读取逻辑
         switch ($type) {
-            //删除未卖出的卡密
+            //未卖出的卡密
             case '1':
                 $query->where('status', true);
                 break;
-            //删除已卖出的卡密
+            //已卖出的卡密
             case '2':
                 $query->where('status', false);
                 break;

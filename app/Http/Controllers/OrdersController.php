@@ -14,6 +14,15 @@ class OrdersController extends Controller
 {
     public function store(OrderRequest $request){
         $amount = $request->input('amount');
+
+        $coupon  = null;
+        if ($code = $request->input('coupon_code')) {
+            $coupon = CouponCode::where('code', $code)->first();
+            if (!$coupon) {
+                throw new InvalidRequestException('优惠券不存在');
+            }
+        }
+
         $sku    = ProductSku::find($request->input('sku_id'));
         //订单总金额
         $total_amount = $amount * $sku->price;
@@ -34,7 +43,7 @@ class OrdersController extends Controller
                 $order->productSku()->associate($sku);
                 $order->shop()->associate($request->input('shop_id'));
                 $order->save();
-                return $order   ;
+                return $order;
             });
         }catch (\Exception $exception){
             throw new InternalException('系统内部错误');

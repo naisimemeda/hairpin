@@ -71,4 +71,9 @@ class Order extends Model
     public function shop(){
         return $this->belongsTo(Shop::class);
     }
+
+    public function couponCode()
+    {
+        return $this->belongsTo(CouponCode::class);
+    }
 }

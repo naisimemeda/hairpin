@@ -27,6 +27,10 @@ Route::middleware('cors')->group(function () {
         Route::delete('card', 'CardController@delete')->name('card.delete');
         //查看卡密
         Route::get('card', 'CardController@index')->name('card.index');
+        //优惠券列表
+        Route::get('coupon_code', 'CouponCodeController@index')->name('coupon_code.index');
+        //添加优惠券
+        Route::post('coupon_code', 'CouponCodeController@store')->name('coupon_code.store');
     });
     Route::get('payment/{order}/alipay', 'PaymentController@payByAlipay')->name('payment.alipay');
     //前端支付宝回调
@@ -34,5 +38,9 @@ Route::middleware('cors')->group(function () {
     //后端支付宝 支付回调
     Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify');
 
+
+
+
+    //提交订单
     Route::post('orders', 'OrdersController@store')->name('orders.store');
 });
