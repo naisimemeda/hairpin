@@ -19,7 +19,7 @@ class OrdersController extends Controller
         $total_amount = $amount * $sku->price;
         //判断库存
         try{
-            \DB::transaction(function () use ($amount, $sku, $request, $total_amount) {
+            $order = \DB::transaction(function () use ($amount, $sku, $request, $total_amount) {
                 if ($sku->decreaseStock($amount) <= 0) {
                     throw new InvalidRequestException('该商品库存不足');
                 }
@@ -34,10 +34,11 @@ class OrdersController extends Controller
                 $order->productSku()->associate($sku);
                 $order->shop()->associate($request->input('shop_id'));
                 $order->save();
+                return $order   ;
             });
         }catch (\Exception $exception){
             throw new InternalException('系统内部错误');
         }
-        return $this->setStatusCode(201)->success('成功');
+        return $this->setStatusCode(201)->success($order);
     }
 }

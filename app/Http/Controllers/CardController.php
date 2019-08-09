@@ -14,16 +14,15 @@ class CardController extends Controller
         $builder = Card::query();
         if($start_time = $request->input('start_time')){
             $end_time = $request->input('end_time');
-            $builder->whereBetween();
+            $builder->whereBetween('created_at', [$start_time, $end_time]);
         }
         //查询对应sku下的 卡密
-        if($sku_id = $request->input('product_sku_id')){
+        if($sku_id = $request->input('sku_id')){
             $builder->where('product_sku_id', $sku_id);
         }
         /*通过scope 筛选出相应数据
             1:未卖出的卡密
             2:已卖出的卡密
-            3:全部
         */
         if($status = $request->input('type')){
             $builder->withStatus($status);
@@ -31,9 +30,8 @@ class CardController extends Controller
         //查询卡号或者卡密
         if ($search = $request->input('search')){
             $like = '%'.$search.'%';
-            $builder->where('title', 'like', $like);
+            $builder->where('card_no', 'like', $like);
         }
-
 
         $result =  $builder->get();
         return $this->setStatusCode(201)->success($result);

@@ -28,6 +28,11 @@ Route::middleware('cors')->group(function () {
         //查看卡密
         Route::get('card', 'CardController@index')->name('card.index');
     });
+    Route::get('payment/{order}/alipay', 'PaymentController@payByAlipay')->name('payment.alipay');
+    //前端支付宝回调
+    Route::get('payment/alipay/return', 'PaymentController@alipayReturn')->name('payment.alipay.return');
+    //后端支付宝 支付回调
+    Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify');
 
     Route::post('orders', 'OrdersController@store')->name('orders.store');
 });

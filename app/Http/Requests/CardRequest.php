@@ -19,7 +19,7 @@ class CardRequest extends FormRequest
                     return [
                         'card_no'  => [
                             'required', function ($attribute, $value, $fail) {
-                                if (Card::where('shop_id', Shop::ShopInfo()->id)->where('card_no', $value)) {
+                                if (Card::where('shop_id', Shop::ShopInfo()->id)->where('card_no', $value)->first()) {
                                     return $fail('重复卡密');
                                 }
                             },

@@ -29,7 +29,6 @@ class OrderRequest extends FormRequest
                 },
             ],
             'amount' => ['required', 'integer', 'min:1'],
-            'email'  => 'email',
             'phone'  => 'required',
             'shop_id'  => [
                 'required',
