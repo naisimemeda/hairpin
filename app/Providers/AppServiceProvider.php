@@ -21,12 +21,14 @@ class AppServiceProvider extends ServiceProvider
             $config['notify_url'] = ngrok_url('payment.alipay.notify');
             $config['return_url'] = route('payment.alipay.return');
             // 判断当前项目运行环境是否为线上环境
-            if (app()->environment() !== 'production') {
+         /*   if (app()->environment() !== 'production') {
                 $config['mode']         = 'dev';
                 $config['log']['level'] = Logger::DEBUG;
             } else {
                 $config['log']['level'] = Logger::WARNING;
-            }
+            }*/
+            $config['mode']         = 'dev';
+            $config['log']['level'] = Logger::DEBUG;
             // 调用 Yansongda\Pay 来创建一个支付宝支付对象
             return Pay::alipay($config);
         });
