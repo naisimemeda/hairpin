@@ -12,6 +12,7 @@
         "fideloper/proxy": "^4.0",
         "jxlwqq/simditor": "^1.0",
         "laravel/framework": "5.8.*",
+        "laravel/horizon": "^3.2",
         "laravel/tinker": "^1.0",
         "medz/cors": "^1.4",
         "niceyo/xhy-sms": "^1.0",
