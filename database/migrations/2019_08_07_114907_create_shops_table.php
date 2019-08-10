@@ -23,6 +23,7 @@ class CreateShopsTable extends Migration
             $table->string('avatar')->nullable();
             $table->string('notice')->nullable();
             $table->decimal('money', 10, 2)->default(0);
+            $table->decimal('frozen_money', 10, 2)->default(0);
             $table->timestamps();
         });
     }

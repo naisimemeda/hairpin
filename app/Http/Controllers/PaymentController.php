@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\InvalidRequestException;
 use App\Models\Card;
 use App\Models\Order;
+use App\Models\Shop;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Nice\XhySms\XhySms;
@@ -65,10 +66,12 @@ class PaymentController extends Controller
         }
 
         \DB::transaction(function () use ($card, $xhySms, $order) {
-            $card->update([
-                'status' => false
-            ]);
             try {
+                $card->update([
+                    'status' => false
+                ]);
+                $shop = Shop::find($order->shop_id);
+                $shop->increment('frozen_money', $order->total_amount);
                 $xhySms->send($order->phone,  [
                     'template' => 'SMS_163853034',
                     'data' => [

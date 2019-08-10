@@ -58,6 +58,13 @@ class CardController extends Controller
     }
 
     public function store(CardRequest $request){
+//            $a = 'wqeqwe|dasdasd
+//            asdasd|dasd
+//            asdasd|asdsad';
+//        $a  = explode(',', str_replace("\r\n",",",$a));
+//        dd(str_replace("\r\n",",",$a));
+
+
         $card = new Card([
            'card_no' => $request->input('card_no'),
            'card_key' => $request->input('card_key'),
