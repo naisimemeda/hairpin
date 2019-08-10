@@ -64,13 +64,7 @@ class CouponCodeController extends Controller
                 'updated_at' => Carbon::now(),
             ];
         }
-        try{
-            DB::transaction(function () use ($coupon){
-                DB::table('coupon_codes')->insert($coupon);
-            });
-        }catch (\Exception $exception){
-            throw new InternalException('系统内部错误');
-        }
+        DB::table('coupon_codes')->insert($coupon);
         return $this->setStatusCode(201)->success('成功');
     }
 }
