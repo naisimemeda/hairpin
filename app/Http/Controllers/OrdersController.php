@@ -6,11 +6,14 @@ use App\Exceptions\CouponCodeUnavailableException;
 use App\Exceptions\InternalException;
 use App\Exceptions\InvalidRequestException;
 use App\Http\Requests\OrderRequest;
+use App\Models\Complaint;
 use App\Models\CouponCode;
 use App\Models\Order;
 use App\Models\ProductSku;
 use App\Models\Shop;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
@@ -65,5 +68,54 @@ class OrdersController extends Controller
             throw new InternalException('系统内部错误');
         }
         return $this->setStatusCode(201)->success($order);
+    }
+
+    public function search(Request $request){
+        $order = $this->SearchOrder($request);
+        $result = $order->with(['items.card'])->find($order->id);
+        return $this->setStatusCode(201)->success($result);
+    }
+
+    public function Complaint(Request $request){
+        $order = $this->SearchOrder($request);
+        if(!$order->paid_at || !$order->refund_no){
+            return $this->failed('不能申请退款', 401);
+        }
+        try{
+            DB::transaction(function () use ($request, $order) {
+                $shop = Shop::find($order->shop_id);
+                $money = $order->total_amount;
+                //先从冻结金额开始扣款, 不够就扣余额
+                if($shop->frozen_money >= $money){
+                    $shop->decrement('frozen_money', $money);
+                }else{
+                    $shop->decrement('money', $money);
+                }
+                $shop->increment('complaint_money', $money);
+                $complaint = new Complaint([
+                    'order_id' => $order->id,
+                    'phone'    => $request->input('phone'),
+                    'qq'       => $request->input('qq'),
+                    'password' => $request->input('phone'),
+                    'reason'   => $request->input('reason')
+                ]);
+                $complaint->save();
+                //更新订单状态
+                $order->update([
+                    'refund_status' => Order::REFUND_STATUS_APPLIED,
+                    //退款订单号
+                    'refund_no'     => Order::getAvailableRefundNo(),
+                ]);
+            });
+        }catch (\Exception $exception) {
+            throw new InvalidRequestException('投诉订单失败');
+        }
+        return $this->setStatusCode(201)->success('成功');
+    }
+
+    public function SearchOrder($request){
+        $no = $request->input('no');
+        $order = Order::query()->where('no', $no)->firstOrFail();
+        return $order;
     }
 }

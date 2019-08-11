@@ -6,6 +6,7 @@ use App\Http\Requests\CardRequest;
 use App\Models\Card;
 use App\Models\ProductSku;
 use App\Models\Shop;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CardController extends Controller
@@ -58,23 +59,26 @@ class CardController extends Controller
     }
 
     public function store(CardRequest $request){
-//            $a = 'wqeqwe|dasdasd
-//            asdasd|dasd
-//            asdasd|asdsad';
-//        $a  = explode(',', str_replace("\r\n",",",$a));
-//        dd(str_replace("\r\n",",",$a));
-
-
-        $card = new Card([
-           'card_no' => $request->input('card_no'),
-           'card_key' => $request->input('card_key'),
-           'product_id' => $request->input('product_id'),
-           'product_sku_id' => $request->input('product_sku_id'),
-        ]);
-        $shop = Shop::ShopInfo();
-        //关联商家
-        $card->shop()->associate($shop->id);
-        $card->save();
+            $a = 'wqeqwe|dasdasd
+  asdasd|dasddas
+    asdasd|asdsad';
+        $data = [];
+        $shop_id = Shop::ShopInfo()->id;
+        $cards  = explode(',', str_replace("\r\n",",",$a));
+        foreach ($cards as $card){
+            $no_key = explode('|', $card);
+            $data[] = [
+                //去除卡号.卡密中的空格
+                'card_no' => str_replace(' ','',$no_key[0]),
+                'card_key' => str_replace(' ','',$no_key[1]),
+                'product_id' => $request->input('product_id'),
+                'product_sku_id' => $request->input('product_sku_id'),
+                'shop_id' => $shop_id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ] ;
+        }
+        Card::insert($data);
         return $this->setStatusCode(201)->success('成功');
     }
 

@@ -32,6 +32,7 @@ Route::middleware('cors')->group(function () {
         //添加优惠券
         Route::post('coupon_code', 'CouponCodeController@store')->name('coupon_code.store');
     });
+    //支付宝付款
     Route::get('payment/{order}/alipay', 'PaymentController@payByAlipay')->name('payment.alipay');
     //前端支付宝回调
     Route::get('payment/alipay/return', 'PaymentController@alipayReturn')->name('payment.alipay.return');
@@ -39,8 +40,10 @@ Route::middleware('cors')->group(function () {
     Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify');
 
 
-
-
+    //查询订单
+    Route::post('order/search', 'OrdersController@search')->name('order.search');
+    //订单退款
+    Route::patch('order/complaint', 'OrdersController@complaint')->name('order.complaint');
     //提交订单
-    Route::post('orders', 'OrdersController@store')->name('orders.store');
+    Route::post('order', 'OrdersController@store')->name('orders.store');
 });

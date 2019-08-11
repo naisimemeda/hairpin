@@ -23,7 +23,8 @@ class CreateShopsTable extends Migration
             $table->string('avatar')->nullable();
             $table->string('notice')->nullable();
             $table->decimal('money', 10, 2)->default(0);
-            $table->decimal('frozen_money', 10, 2)->default(0);
+            $table->decimal('frozen_money', 10, 2)->default(0)->comment('第二天可提现金额');
+            $table->decimal('complaint_money', 10, 2)->default(0)->comment('投诉冻结金额');
             $table->timestamps();
         });
     }

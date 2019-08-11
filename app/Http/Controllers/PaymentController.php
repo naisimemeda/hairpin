@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\InvalidRequestException;
 use App\Models\Card;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Shop;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -70,6 +71,11 @@ class PaymentController extends Controller
                 $card->update([
                     'status' => false
                 ]);
+                $item = new OrderItem([
+                    'order_id' => $order->id,
+                    'card_id' => $card->id
+                ]);
+                $item->save();
                 $shop = Shop::find($order->shop_id);
                 $shop->increment('frozen_money', $order->total_amount);
                 $xhySms->send($order->phone,  [

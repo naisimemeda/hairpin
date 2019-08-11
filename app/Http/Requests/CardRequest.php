@@ -17,14 +17,7 @@ class CardRequest extends FormRequest
             case 'POST':
                 {
                     return [
-                        'card_no'  => [
-                            'required', function ($attribute, $value, $fail) {
-                                if (Card::where('shop_id', Shop::ShopInfo()->id)->where('card_no', $value)->first()) {
-                                    return $fail('重复卡密');
-                                }
-                            },
-                        ],
-                        'card_key'  => ['required'],
+                        'card_no'  => ['required'],
                         'product_id' => [
                             'required', function ($attribute, $value, $fail) {
                                 if (!$product = Product::find($value)) {

@@ -13,7 +13,7 @@ class Shop extends Authenticatable implements JWTSubject
     use Notifiable;
 
     protected $fillable = [
-        'name', 'phone', 'email', 'password', 'status', 'avatar', 'money', 'frozen_money'
+        'name', 'phone', 'email', 'password', 'status', 'avatar', 'money', 'frozen_money', 'complaint_money'
     ];
 
     protected $hidden = [
