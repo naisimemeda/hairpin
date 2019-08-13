@@ -6,6 +6,7 @@ use App\Exceptions\CouponCodeUnavailableException;
 use App\Exceptions\InternalException;
 use App\Exceptions\InvalidRequestException;
 use App\Http\Requests\OrderRequest;
+use App\Jobs\CloseOrder;
 use App\Models\Complaint;
 use App\Models\CouponCode;
 use App\Models\Order;
@@ -60,7 +61,7 @@ class OrdersController extends Controller
                     // 更新订单总金额
                     $order->update(['total_amount' => $total_amount]);
                 }
-
+                $this->dispatch(new CloseOrder($order, config('app.order_ttl')));
                 return $order;
             });
         }catch (\Exception $exception){

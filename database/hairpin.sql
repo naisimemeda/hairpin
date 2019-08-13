@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 11/08/2019 22:56:00
+ Date: 13/08/2019 17:17:55
 */
 
 SET NAMES utf8mb4;
@@ -32,16 +32,17 @@ CREATE TABLE `cards`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of cards
 -- ----------------------------
-INSERT INTO `cards` VALUES (1, 'xxx2xxx', 'eqweqweqweqwe', 1, 1, 1, 1, '2019-08-09 22:54:36', '2019-08-10 23:28:04');
-INSERT INTO `cards` VALUES (2, 'zxczxczxczxc12', 'eqweqweqweqwe', 1, 1, 1, 1, '2019-08-09 22:56:18', '2019-08-10 00:07:27');
-INSERT INTO `cards` VALUES (3, 'wqeqwe', 'dasdasd', 1, 1, 1, 1, NULL, NULL);
-INSERT INTO `cards` VALUES (4, 'asdasd', 'dasd', 1, 1, 1, 1, NULL, NULL);
-INSERT INTO `cards` VALUES (5, 'asdasd', 'asdsad', 1, 1, 1, 1, NULL, NULL);
+INSERT INTO `cards` VALUES (1, 'wqeqwe', 'dasdasd', 1, 1, 1, 0, '2019-08-13 15:54:40', '2019-08-13 16:57:26');
+INSERT INTO `cards` VALUES (7, 'asdasd', 'dasddas', 1, 1, 1, 0, '2019-08-13 15:54:40', '2019-08-13 16:57:26');
+INSERT INTO `cards` VALUES (8, 'asdasd', 'asdsad', 1, 1, 1, 0, '2019-08-13 15:54:40', '2019-08-13 16:57:26');
+INSERT INTO `cards` VALUES (9, 'wqeqwe', 'dasdasd', 1, 1, 1, 0, '2019-08-13 15:55:54', '2019-08-13 16:57:26');
+INSERT INTO `cards` VALUES (10, 'asdasd', 'dasddas', 1, 1, 1, 0, '2019-08-13 15:55:54', '2019-08-13 16:57:26');
+INSERT INTO `cards` VALUES (11, 'asdasd', 'asdsad', 1, 1, 1, 0, '2019-08-13 15:55:54', '2019-08-13 16:57:26');
 
 -- ----------------------------
 -- Table structure for complaints
@@ -89,7 +90,7 @@ CREATE TABLE `coupon_codes`  (
 -- Records of coupon_codes
 -- ----------------------------
 INSERT INTO `coupon_codes` VALUES (1, 1, 'IMY05MFXILVSV4A6', 'fixed', 9.00, 100, 1, 20.00, 1, '2019-08-10 04:43:49', '2019-08-10 18:08:05');
-INSERT INTO `coupon_codes` VALUES (2, 1, 'ZSE4AROOAG1ERX7N', 'percent', 9.00, 100, 2, 20.00, 1, '2019-08-10 04:43:49', '2019-08-10 23:26:34');
+INSERT INTO `coupon_codes` VALUES (2, 1, 'ZSE4AROOAG1ERX7N', 'percent', 9.00, 100, 4, 20.00, 1, '2019-08-10 04:43:49', '2019-08-13 16:56:44');
 INSERT INTO `coupon_codes` VALUES (3, 1, 'WKZIMVMICWDENMXJ', 'percent', 9.00, 100, 1, 20.00, 1, '2019-08-10 04:43:49', '2019-08-10 18:12:12');
 INSERT INTO `coupon_codes` VALUES (4, 1, 'KFGSEOXA1LK6GOWY', 'percent', 8.50, 100, 1, 20.00, 1, '2019-08-10 04:43:49', '2019-08-10 18:25:36');
 INSERT INTO `coupon_codes` VALUES (5, 1, 'OC7WLFJ5CBDQAC4G', 'fixed', 9.00, 100, 0, 20.00, 1, '2019-08-10 04:43:49', '2019-08-10 04:43:49');
@@ -1430,12 +1431,17 @@ CREATE TABLE `order_items`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of order_items
 -- ----------------------------
-INSERT INTO `order_items` VALUES (1, 58, 1, '2019-08-11 21:14:02', '2019-08-11 21:14:02');
+INSERT INTO `order_items` VALUES (2, 60, 1, '2019-08-13 16:57:26', '2019-08-13 16:57:26');
+INSERT INTO `order_items` VALUES (3, 60, 7, '2019-08-13 16:57:26', '2019-08-13 16:57:26');
+INSERT INTO `order_items` VALUES (4, 60, 8, '2019-08-13 16:57:26', '2019-08-13 16:57:26');
+INSERT INTO `order_items` VALUES (5, 60, 9, '2019-08-13 16:57:26', '2019-08-13 16:57:26');
+INSERT INTO `order_items` VALUES (6, 60, 10, '2019-08-13 16:57:26', '2019-08-13 16:57:26');
+INSERT INTO `order_items` VALUES (7, 60, 11, '2019-08-13 16:57:26', '2019-08-13 16:57:26');
 
 -- ----------------------------
 -- Table structure for orders
@@ -1466,7 +1472,7 @@ CREATE TABLE `orders`  (
   UNIQUE INDEX `orders_refund_no_unique`(`refund_no`) USING BTREE,
   INDEX `orders_coupon_code_id_foreign`(`coupon_code_id`) USING BTREE,
   CONSTRAINT `orders_coupon_code_id_foreign` FOREIGN KEY (`coupon_code_id`) REFERENCES `coupon_codes` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 59 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of orders
@@ -1485,6 +1491,8 @@ INSERT INTO `orders` VALUES (19, '20190810181127173901', 1, 1, 1, '2514430140@qq
 INSERT INTO `orders` VALUES (20, '20190810181212263329', 1, 1, 1, '2514430140@qq.com', '18584864076', 1, 91.00, '123123备注', '2019-08-10 23:17:25', 3, 'alipay', '2019081022001442511000052123', 'pending', NULL, 0, '2019-08-10 18:12:12', '2019-08-10 23:17:25');
 INSERT INTO `orders` VALUES (57, '20190810182536678940', 1, 1, 1, '2514430140@qq.com', '18584864076', 1, 85.00, '123123备注', NULL, 4, NULL, NULL, 'pending', NULL, 0, '2019-08-10 18:25:36', '2019-08-10 18:25:37');
 INSERT INTO `orders` VALUES (58, '20190810232634569377', 1, 1, 1, '2514430140@qq.com', '18584864076', 1, 90.00, '123123备注', '2019-08-10 23:28:04', 2, 'alipay', '2019081022001442511000055224', 'applied', '6d8bdd69bfba47c8a8ed1187d7d57cca', 0, '2019-08-10 23:26:34', '2019-08-11 22:52:15');
+INSERT INTO `orders` VALUES (59, '20190813165221460921', 1, 1, 1, '2514430140@qq.com', '18584864076', 6, 540.00, '123123备注', NULL, 2, NULL, NULL, 'pending', NULL, 0, '2019-08-13 16:52:21', '2019-08-13 16:52:21');
+INSERT INTO `orders` VALUES (60, '20190813165644687091', 1, 1, 1, '2514430140@qq.com', '18584864076', 6, 540.00, '123123备注', '2019-08-13 16:57:26', 2, 'alipay', '2019081322001442511000058571', 'pending', NULL, 0, '2019-08-13 16:56:44', '2019-08-13 16:57:26');
 
 -- ----------------------------
 -- Table structure for password_resets
@@ -1506,20 +1514,22 @@ CREATE TABLE `product_skus`  (
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '详情',
   `price` decimal(10, 2) NOT NULL,
-  `stock` int(10) UNSIGNED NOT NULL COMMENT '库存',
+  `stock` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '库存',
   `product_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `product_skus_product_id_foreign`(`product_id`) USING BTREE,
   CONSTRAINT `product_skus_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product_skus
 -- ----------------------------
-INSERT INTO `product_skus` VALUES (1, 'Iphone X', '苹果手机', 100.00, 86, 1, '2019-08-09 22:52:32', '2019-08-10 23:26:34');
+INSERT INTO `product_skus` VALUES (1, 'Iphone X', '苹果手机', 100.00, 80, 1, '2019-08-09 22:52:32', '2019-08-13 16:56:44');
 INSERT INTO `product_skus` VALUES (2, 'Ipohen 8', 'Ipohen 8 xixiixixix', 1000.00, 1000, 1, '2019-08-09 22:52:32', '2019-08-09 22:52:32');
+INSERT INTO `product_skus` VALUES (3, 'Iphone Xs', '苹果手机', 100.00, 0, 2, '2019-08-13 15:54:09', '2019-08-13 15:54:09');
+INSERT INTO `product_skus` VALUES (4, 'Ipohen 8 Puls', 'Ipohen 8 xixiixixix', 1000.00, 0, 2, '2019-08-13 15:54:09', '2019-08-13 15:54:09');
 
 -- ----------------------------
 -- Table structure for products
@@ -1538,12 +1548,13 @@ CREATE TABLE `products`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of products
 -- ----------------------------
-INSERT INTO `products` VALUES (1, '苹果手机哟', '详情', '这是简介', 'www.baidu.com', 0, 1, 1, 100.00, '2019-08-09 22:52:32', '2019-08-09 22:52:32');
+INSERT INTO `products` VALUES (1, '苹果手机哟', '详情', '这是简介', 'www.baidu.com', 6, 1, 1, 100.00, '2019-08-09 22:52:32', '2019-08-13 16:57:26');
+INSERT INTO `products` VALUES (2, '苹果手机daqsdasda哟', '详qq情', '这是简qqweqwe介', 'www.baidu.com', 0, 1, 1, 100.00, '2019-08-13 15:54:09', '2019-08-13 15:54:09');
 
 -- ----------------------------
 -- Table structure for shops
@@ -1569,7 +1580,7 @@ CREATE TABLE `shops`  (
 -- ----------------------------
 -- Records of shops
 -- ----------------------------
-INSERT INTO `shops` VALUES (1, 'naisi11', '18584864076', '$2y$10$Zzw2CONn2oma292YYsb83O5cp8n1Vd4cJaEV5IBWBAC/CObqwp8sa', NULL, 1, NULL, NULL, 151.00, '2019-08-09 22:26:44', '2019-08-11 22:52:15', 0.00, 90.00);
+INSERT INTO `shops` VALUES (1, 'naisi11', '18584864076', '$2y$10$Zzw2CONn2oma292YYsb83O5cp8n1Vd4cJaEV5IBWBAC/CObqwp8sa', NULL, 1, NULL, NULL, 151.00, '2019-08-09 22:26:44', '2019-08-13 16:57:26', 540.00, 90.00);
 
 -- ----------------------------
 -- Table structure for users
