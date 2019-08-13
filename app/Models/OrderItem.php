@@ -16,6 +16,6 @@ class OrderItem extends Model
     }
 
     public function card(){
-        return $this->hasMany(Card::class, 'id');
+        return $this->hasMany(Card::class, 'id', 'card_id');
     }
 }

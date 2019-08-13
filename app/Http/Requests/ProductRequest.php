@@ -17,7 +17,7 @@ class ProductRequest extends FormRequest
             'skus.*' => [ // 检查 skus 数组下每一个子数组的参数
                 'required',
                 function ($attribute, $value, $fail) {
-                    if (empty($value['title']) || empty($value['description']) || empty($value['stock']) || empty($value['price'])) {
+                    if (empty($value['title']) || empty($value['description']) || empty($value['price'])) {
                         return $fail('sku内容不能为空');
                     }
                 },

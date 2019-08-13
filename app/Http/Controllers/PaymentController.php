@@ -6,9 +6,12 @@ use App\Exceptions\InvalidRequestException;
 use App\Models\Card;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\ProductSku;
 use App\Models\Shop;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Nice\XhySms\XhySms;
 
 class PaymentController extends Controller
@@ -34,7 +37,7 @@ class PaymentController extends Controller
         dd($data);
     }
 
-    public function alipayNotify(XhySms $xhySms)
+    public function alipayNotify()
     {
         // 校验输入参数
         $data  = app('alipay')->verify();
@@ -60,35 +63,57 @@ class PaymentController extends Controller
             'payment_method' => 'alipay', // 支付方式
             'payment_no'     => $data->trade_no, // 支付宝订单号
         ]);
-        //查出该商家sku下 可用的卡密
-        $card = Card::where('product_sku_id', $order->product_sku_id)->where('shop_id', $order->shop_id)->where('status', true)->first();
-        if(!$card){
-            return $this->failed('已无库存', 401);
-        }
 
-        \DB::transaction(function () use ($card, $xhySms, $order) {
+        $this->PayAfter($order);
+
+        return app('alipay')->success();
+    }
+
+
+    //支付成功后调用
+    public function PayAfter($order){
+        //查出该商家sku下 可用的卡密
+        $card = Card::where([
+            ['product_sku_id', $order->product_sku_id],
+            ['shop_id', $order->shop_id],
+            ['status', true],
+        ])->take($order->amount)->get();
+
+        DB::transaction(function () use ($card, $order) {
             try {
-                $card->update([
+                //修改查询出来的卡密的状态
+                $card_id = collect($card)->pluck('id');
+                Card::whereIn('id', $card_id)->update([
                     'status' => false
                 ]);
-                $item = new OrderItem([
-                    'order_id' => $order->id,
-                    'card_id' => $card->id
-                ]);
-                $item->save();
+                //插入订单详情
+                $items = [];
+                foreach ($card as $item){
+                    $items[] = [
+                        'order_id' => $order->id,
+                        'card_id' => $item->id,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ];
+                }
+                OrderItem::insert($items);
+                $amount = $order->amount;  //订单数量
+                //添加暂存金额
                 $shop = Shop::find($order->shop_id);
                 $shop->increment('frozen_money', $order->total_amount);
-                $xhySms->send($order->phone,  [
+                //增加商品销量
+                $product = Product::find($order->product_id);
+                $product->increment('sold_count', $amount);
+                //发送订单号
+                app('XhySms')->send($order->phone,  [
                     'template' => 'SMS_163853034',
                     'data' => [
-                        'code' => 1234
+                        'code' => $order->no
                     ]
                 ], 'aliyun');
             } catch (\Exception $exception) {
                 throw new InvalidRequestException('短信发送失败');
             }
         });
-
-        return app('alipay')->success();
     }
 }
