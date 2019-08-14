@@ -6,12 +6,12 @@ use App\Exceptions\CouponCodeUnavailableException;
 use App\Exceptions\InternalException;
 use App\Exceptions\InvalidRequestException;
 use App\Http\Requests\OrderRequest;
+use App\Jobs\CloseOrder;
 use App\Models\Complaint;
 use App\Models\CouponCode;
 use App\Models\Order;
 use App\Models\ProductSku;
 use App\Models\Shop;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -32,9 +32,9 @@ class OrdersController extends Controller
         $sku    = ProductSku::find($request->input('sku_id'));
         //订单总金额
         $total_amount = $amount * $sku->price;
-        //判断库存
         try{
             $order = \DB::transaction(function () use ($amount, $sku, $request, $total_amount, $coupon) {
+                //判断库存
                 if ($sku->decreaseStock($amount) <= 0) {
                     throw new InvalidRequestException('该商品库存不足');
                 }
@@ -61,7 +61,7 @@ class OrdersController extends Controller
                     // 更新订单总金额
                     $order->update(['total_amount' => $total_amount]);
                 }
-
+                $this->dispatch(new CloseOrder($order, config('app.order_ttl')));
                 return $order;
             });
         }catch (\Exception $exception){
@@ -72,8 +72,11 @@ class OrdersController extends Controller
 
     public function search(Request $request){
         $order = $this->SearchOrder($request);
-        $result = $order->with(['items.card'])->find($order->id);
-        return $this->setStatusCode(201)->success($result);
+        $card = $order->items()->with('card')->get();
+        return $this->setStatusCode(201)->success([
+            'order' => $order,
+            'card' => $card
+        ]);
     }
 
     public function Complaint(Request $request){

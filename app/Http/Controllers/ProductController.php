@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductRequest;
+use  App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use App\Models\ProductSku;
 use App\Models\Shop;
@@ -65,7 +65,6 @@ class ProductController extends Controller
                 $skus = new ProductSku([
                     'title' => $sku['title'],
                     'description' => $sku['description'],
-                    'stock' => $sku['stock'],
                     'price' => $sku['price'],
                 ]);
                 $skus->product()->associate($product->id);
@@ -99,7 +98,6 @@ class ProductController extends Controller
                         'title' => $sku['title'],
                         'description' => $sku['description'],
                         'price' => $sku['price'],
-                        'stock' => $sku['stock'],
                     ]);
                 }else{
                     $skus = new ProductSku([

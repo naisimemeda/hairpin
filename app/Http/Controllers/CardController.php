@@ -50,7 +50,8 @@ class CardController extends Controller
         }
 
         //查询该sku 卡密总数
-        $result = $builder->withCount(['card'])->get()->each(function ($item, $key){
+        $result = $builder->withCount(['card'])->paginate(16);
+        $result->each(function ($item, $key){
             //查询这个sku 卖出总数
             $item['sell_out'] = Card::with(['skus'])->where('product_sku_id', $item['id'])->where('status', false)->count();
         });
@@ -65,6 +66,8 @@ class CardController extends Controller
         $data = [];
         $shop_id = Shop::ShopInfo()->id;
         $cards  = explode(',', str_replace("\r\n",",",$a));
+        $sku_id = $request->input('product_sku_id');
+        $sku = ProductSku::find($sku_id);
         foreach ($cards as $card){
             $no_key = explode('|', $card);
             $data[] = [
@@ -72,12 +75,13 @@ class CardController extends Controller
                 'card_no' => str_replace(' ','',$no_key[0]),
                 'card_key' => str_replace(' ','',$no_key[1]),
                 'product_id' => $request->input('product_id'),
-                'product_sku_id' => $request->input('product_sku_id'),
+                'product_sku_id' => $sku_id,
                 'shop_id' => $shop_id,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ] ;
         }
+        $sku->increment('stock', count($cards)); //添加sku库存
         Card::insert($data);
         return $this->setStatusCode(201)->success('成功');
     }

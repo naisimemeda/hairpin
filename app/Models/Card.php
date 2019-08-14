@@ -41,4 +41,8 @@ class Card extends Model
         }
         return $query;
     }
+
+    public function items(){
+        return $this->hasOne(OrderItem::class, 'id');
+    }
 }

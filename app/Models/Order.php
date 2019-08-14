@@ -24,7 +24,10 @@ class Order extends Model
         'no', 'email', 'phone', 'total_amount', 'remark',
         'product_id', 'product_sku_id', 'amount',
         'paid_at' ,'payment_method', 'payment_no',
-        'refund_status', 'refund_no',
+        'refund_status', 'refund_no', 'closed'
+    ];
+    protected $casts = [
+        'closed'    => 'boolean',
     ];
 
     protected $dates = [

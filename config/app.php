@@ -14,7 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-
+    'order_ttl' => 1800,
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -175,6 +175,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+
+        Hhxsv5\LaravelS\Illuminate\LaravelSServiceProvider::class,
 
     ],
 

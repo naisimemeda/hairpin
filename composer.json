@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.1.3",
         "fideloper/proxy": "^4.0",
+        "hhxsv5/laravel-s": "~3.5.0",
         "laravel/framework": "5.8.*",
         "laravel/horizon": "^3.2",
         "laravel/tinker": "^1.0",
