@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 
 Route::middleware('cors')->group(function () {
+
     Route::group(['prefix' => 'shop'], function () {
         //请求验证码
         Route::post('verificationCodes', 'ShopController@verificationCodes')->name('shop.verificationCodes');
