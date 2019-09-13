@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCardsTable extends Migration
+class CreateProductCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateCardsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cards', function (Blueprint $table) {
+        Schema::create('product_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('card_no');
-            $table->string('card_key');
-            $table->unsignedBigInteger('shop_id')->comment('商家id');
-            $table->unsignedBigInteger('product_id')->comment('商品id');
-            $table->boolean('status')->default(true);
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ class CreateCardsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('card_keys');
+        Schema::dropIfExists('product_categories');
     }
 }

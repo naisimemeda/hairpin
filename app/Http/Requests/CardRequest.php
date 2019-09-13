@@ -26,29 +26,16 @@ class CardRequest extends FormRequest
                             },
                             Rule::exists('products', 'id')->where('shop_id', Shop::ShopInfo()->id),
                         ],
-                        'product_sku_id' => [
-                            'required', function ($attribute, $value, $fail) {
-                                if (!$sku = ProductSku::find($value)) {
-                                    return $fail('该商品不存在');
-                                }
-                                if (!$sku->product->on_sale) {
-                                    return $fail('该商品未上架');
-                                }
-                            },
-                        ],
                     ];
                 }
             case 'DELETE':
                 {
                     return [
                         'type' => 'required|between:1,3',
-                        'product_sku_id' => [
+                        'product_id' => [
                             'required', function ($attribute, $value, $fail) {
-                                if (!$sku = ProductSku::find($value)) {
+                                if (!$sku = Product::find($value)) {
                                     return $fail('该商品不存在');
-                                }
-                                if (!$sku->product->on_sale) {
-                                    return $fail('该商品未上架');
                                 }
                             },
                         ],

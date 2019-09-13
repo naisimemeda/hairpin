@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CardRequest;
 use App\Models\Card;
+use App\Models\Product;
 use App\Models\ProductSku;
 use App\Models\Shop;
 use Carbon\Carbon;
@@ -34,40 +35,48 @@ class CardController extends Controller
             $builder->where('card_no', 'like', $like);
         }
 
-        $result =  $builder->paginate(16);
-        return $this->setStatusCode(201)->success($result);
+        $pageSize = $request->input('pageSize') ?: 16;
+        $page = $pageSize * ($request->input('page') - 1);
+
+        $result =  $builder->offset($page)->limit($pageSize)->get();
+        return $this->setStatusCode(201)->success([
+            'data' => $result,
+            'total' => count($builder->get())
+        ]);
     }
 
-    public function SkuCard(Request $request){
-        $builder = ProductSku::query();
-        if($product_id = $request->input('product_id')){
-            $builder->where('product_id', $product_id);
-        }
+    public function ProductCard(Request $request){
+        $builder = Product::query();
 
         if ($search = $request->input('search')){
             $like = '%'.$search.'%';
             $builder->where('title', 'like', $like);
         }
 
+        $pageSize = $request->input('pageSize') ?: 16;
+        $page = $pageSize * ($request->input('page') - 1);
+
         //查询该sku 卡密总数
-        $result = $builder->withCount(['card'])->paginate(16);
+        $result = $builder->withCount(['card'])->offset($page)->limit($pageSize)->get();
         $result->each(function ($item, $key){
-            //查询这个sku 卖出总数
-            $item['sell_out'] = Card::with(['skus'])->where('product_sku_id', $item['id'])->where('status', false)->count();
+            //查询卖出总数
+            $item['sell_out'] = Card::with(['product'])->where('product_id', $item['id'])->where('status', false)->count();
         });
 
-        return $this->setStatusCode(201)->success($result);
+        return $this->setStatusCode(201)->success([
+            'data' => $result,
+            'total' => count($builder->get())
+        ]);
     }
 
     public function store(CardRequest $request){
             $a = 'wqeqwe|dasdasd
-  asdasd|dasddas
-    asdasd|asdsad';
+asdasd|dasddas
+asdasd|asdsad';
         $data = [];
         $shop_id = Shop::ShopInfo()->id;
-        $cards  = explode(',', str_replace("\r\n",",",$a));
-        $sku_id = $request->input('product_sku_id');
-        $sku = ProductSku::find($sku_id);
+        $cards  = explode(',', str_replace("\n",",", $request->input('cards') ? : $a));
+
         foreach ($cards as $card){
             $no_key = explode('|', $card);
             $data[] = [
@@ -75,20 +84,18 @@ class CardController extends Controller
                 'card_no' => str_replace(' ','',$no_key[0]),
                 'card_key' => str_replace(' ','',$no_key[1]),
                 'product_id' => $request->input('product_id'),
-                'product_sku_id' => $sku_id,
                 'shop_id' => $shop_id,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ] ;
         }
-        $sku->increment('stock', count($cards)); //添加sku库存
         Card::insert($data);
         return $this->setStatusCode(201)->success('成功');
     }
 
     public function delete(CardRequest $request){
         $status = $request->input('type');
-        $card = Card::query()->where('product_sku_id', $request->input('product_sku_id'));
+        $card = Card::query()->where('product_id', $request->input('product_id'));
         /*通过scope 筛选出相应数据
             1:未卖出的卡密
             2:已卖出的卡密

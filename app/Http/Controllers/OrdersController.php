@@ -10,7 +10,7 @@ use App\Jobs\CloseOrder;
 use App\Models\Complaint;
 use App\Models\CouponCode;
 use App\Models\Order;
-use App\Models\ProductSku;
+use App\Models\Product;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,15 +29,19 @@ class OrdersController extends Controller
             $coupon->checkAvailable();
         }
 
-        $sku    = ProductSku::find($request->input('sku_id'));
+        $product    = Product::query()->find($request->input('product_id'));
+
+        $card = $product->whereHas('card', function ($query) use($product){
+            $query->where('product_id', $product->id)->where('status', true);
+        })->get();
+        if ($card->isEmpty()) {
+            throw new InvalidRequestException('该商品库存不足');
+        }
         //订单总金额
-        $total_amount = $amount * $sku->price;
+        $total_amount = $amount * $product->price;
+
         try{
-            $order = \DB::transaction(function () use ($amount, $sku, $request, $total_amount, $coupon) {
-                //判断库存
-                if ($sku->decreaseStock($amount) <= 0) {
-                    throw new InvalidRequestException('该商品库存不足');
-                }
+            $order = \DB::transaction(function () use ($amount, $product, $request, $total_amount, $coupon) {
                 $order = new Order([
                     'remark'       => $request->input('remark'),
                     'amount'       => $amount,
@@ -45,8 +49,7 @@ class OrdersController extends Controller
                     'phone'        => $request->input('phone'),
                     'email'        => $request->input('email'),
                 ]);
-                $order->product()->associate($sku->product_id);
-                $order->productSku()->associate($sku);
+                $order->product()->associate($product->id);
                 $order->shop()->associate($request->input('shop_id'));
                 $order->save();
                 if ($coupon) {

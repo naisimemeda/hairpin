@@ -36,9 +36,6 @@ class CloseOrder implements ShouldQueue
         \DB::transaction(function() {
             // 将订单的 closed 字段标记为 true，即关闭订单
             $this->order->update(['closed' => true]);
-            // 将订单中的数量加回到 SKU
-            $sku = ProductSku::find($this->order->product_sku_id);
-            $sku->increment('stock', $this->order->amount);
         });
     }
 }

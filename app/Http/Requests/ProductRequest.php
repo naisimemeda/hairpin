@@ -12,16 +12,9 @@ class ProductRequest extends FormRequest
             'table'  => ['required', 'max:25'],
             'description'  => ['required'],
             'image'  => ['required'],
-            'skus'  => ['required', 'array'],
             'explain' => ['required'],
-            'skus.*' => [ // 检查 skus 数组下每一个子数组的参数
-                'required',
-                function ($attribute, $value, $fail) {
-                    if (empty($value['title']) || empty($value['description']) || empty($value['price'])) {
-                        return $fail('sku内容不能为空');
-                    }
-                },
-            ],
+            'price' => ['required', 'integer', 'min:1'],
+            'category_id' => ['required', 'integer'],
         ];
     }
 }

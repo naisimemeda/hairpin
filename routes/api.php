@@ -13,6 +13,16 @@ Route::middleware('cors')->group(function () {
         Route::post('authorization', 'ShopController@PhoneLogin')->name('phone.login');
         Route::post('phone', 'ShopController@info')->name('shop.info');
 
+        //添加商品分类
+        Route::post('product/category', 'ProductCategoryController@store')->name('product.category');
+        //分类列表
+        Route::get('category/list', 'ProductCategoryController@CategoryList')->name('category.list');
+        //分类下的商品
+        Route::get('category/product', 'ProductCategoryController@CategoryProduct')->name('category.product');
+
+        //商品列表
+        Route::get('product/list', 'ProductController@index')->name('product.index');
+
         //添加商品
         Route::post('product', 'ProductController@store')->name('product.store');
         //商品详情
@@ -22,8 +32,8 @@ Route::middleware('cors')->group(function () {
 
         //添加卡密
         Route::post('card', 'CardController@store')->name('card.store');
-        //查看sku列表统计的卡密
-        Route::get('sku_card', 'CardController@SkuCard')->name('card.sku_card');
+        //查看统计的卡密
+        Route::get('product/list/card', 'CardController@ProductCard')->name('card.product_card');
         //删除卡密
         Route::delete('card', 'CardController@delete')->name('card.delete');
         //查看卡密

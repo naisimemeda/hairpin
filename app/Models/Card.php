@@ -22,10 +22,6 @@ class Card extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function skus(){
-        return $this->belongsTo(ProductSku::class);
-    }
-
     public function scopeWithStatus($query, $type)
     {
         // 不同的排序，使用不同的数据读取逻辑

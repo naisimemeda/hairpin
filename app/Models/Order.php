@@ -81,10 +81,6 @@ class Order extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function productSku(){
-        return $this->belongsTo(ProductSku::class);
-    }
-
     public function shop(){
         return $this->belongsTo(Shop::class);
     }
