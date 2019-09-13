@@ -84,7 +84,8 @@ class PaymentController extends Controller
                 //修改查询出来的卡密的状态
                 $card_id = collect($card)->pluck('id');
                 Card::whereIn('id', $card_id)->update([
-                    'status' => false
+                    'status' => false,
+                    'sell_time' => Carbon::now()
                 ]);
                 //插入订单详情
                 $items = [];

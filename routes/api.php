@@ -22,6 +22,8 @@ Route::middleware('cors')->group(function () {
 
         //商品列表
         Route::post('product/list', 'ProductController@index')->name('product.index');
+        //商品下的卡密
+        Route::post('card/list', 'ProductController@index')->name('product.index');
 
         //添加商品
         Route::post('product', 'ProductController@store')->name('product.store');

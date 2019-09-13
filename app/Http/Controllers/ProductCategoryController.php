@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductCategoryRequest;
 use App\Models\ProductCategory;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 
 class ProductCategoryController extends Controller
@@ -16,7 +17,8 @@ class ProductCategoryController extends Controller
      */
     public function store(ProductCategoryRequest $request){
         ProductCategory::query()->create([
-            'name' => $request->input('name')
+            'name' => $request->input('name'),
+            'shop_id' => Shop::ShopInfo()->id
         ]);
 
         return $this->setStatusCode(201)->success('成功');
@@ -31,7 +33,7 @@ class ProductCategoryController extends Controller
         $pageSize = $request->input('pageSize') ?: 16;
         $page = $pageSize * ($request->input('page') - 1);
 
-        $category = ProductCategory::query()->offset($page)->limit($pageSize)->get();
+        $category = ProductCategory::query()->where('shop_id', Shop::ShopInfo()->id)->offset($page)->limit($pageSize)->get();
         return $this->setStatusCode(201)->success([
             'data' => $category,
             'total' => count(ProductCategory::get())
@@ -39,7 +41,7 @@ class ProductCategoryController extends Controller
     }
 
     public function CategoryProduct(Request $request){
-        $category =  ProductCategory::with(['product:id,table,category_id'])->get();
+        $category =  ProductCategory::with(['product:id,table,category_id'])->where('shop_id', Shop::ShopInfo()->id)->get();
         return $this->setStatusCode(201)->success($category);
     }
 }

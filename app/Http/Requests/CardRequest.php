@@ -17,7 +17,6 @@ class CardRequest extends FormRequest
             case 'POST':
                 {
                     return [
-                        'card_no'  => ['required'],
                         'product_id' => [
                             'required', function ($attribute, $value, $fail) {
                                 if (!$product = Product::find($value)) {

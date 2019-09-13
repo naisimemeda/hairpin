@@ -19,8 +19,8 @@ class CardController extends Controller
             $builder->whereBetween('created_at', [$start_time, $end_time]);
         }
         //查询对应sku下的 卡密
-        if($sku_id = $request->input('sku_id')){
-            $builder->where('product_sku_id', $sku_id);
+        if($sku_id = $request->input('product_id')){
+            $builder->where('product_id', $sku_id);
         }
         /*通过scope 筛选出相应数据
             1:未卖出的卡密
@@ -29,7 +29,7 @@ class CardController extends Controller
         if($status = $request->input('type')){
             $builder->withStatus($status);
         }
-        //查询卡号或者卡密
+        //查询卡号
         if ($search = $request->input('search')){
             $like = '%'.$search.'%';
             $builder->where('card_no', 'like', $like);
@@ -38,7 +38,7 @@ class CardController extends Controller
         $pageSize = $request->input('pageSize') ?: 16;
         $page = $pageSize * ($request->input('page') - 1);
 
-        $result =  $builder->offset($page)->limit($pageSize)->get();
+        $result =  $builder->with(['product:id,table'])->offset($page)->limit($pageSize)->get();
         return $this->setStatusCode(201)->success([
             'data' => $result,
             'total' => count($builder->get())
@@ -50,14 +50,15 @@ class CardController extends Controller
 
         if ($search = $request->input('search')){
             $like = '%'.$search.'%';
-            $builder->where('title', 'like', $like);
+            $builder->where('table', 'like', $like);
         }
 
         $pageSize = $request->input('pageSize') ?: 16;
         $page = $pageSize * ($request->input('page') - 1);
 
         //查询该sku 卡密总数
-        $result = $builder->withCount(['card'])->offset($page)->limit($pageSize)->get();
+        $result = $builder->withCount(['card'])->with(['category:id,name'])->offset($page)->limit($pageSize)
+            ->get();
         $result->each(function ($item, $key){
             //查询卖出总数
             $item['sell_out'] = Card::with(['product'])->where('product_id', $item['id'])->where('status', false)->count();
@@ -70,9 +71,6 @@ class CardController extends Controller
     }
 
     public function store(CardRequest $request){
-            $a = 'wqeqwe|dasdasd
-asdasd|dasddas
-asdasd|asdsad';
         $data = [];
         $shop_id = Shop::ShopInfo()->id;
         $cards  = explode(',', str_replace("\n",",", $request->input('cards') ? : $a));

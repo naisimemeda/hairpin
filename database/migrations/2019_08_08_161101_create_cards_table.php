@@ -20,6 +20,7 @@ class CreateCardsTable extends Migration
             $table->unsignedBigInteger('shop_id')->comment('商家id');
             $table->unsignedBigInteger('product_id')->comment('商品id');
             $table->boolean('status')->default(true);
+            $table->dateTime('sell_time')->nullable()->comment('出售时间');
             $table->timestamps();
         });
     }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Shop;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductRequest extends FormRequest
 {
@@ -14,7 +16,7 @@ class ProductRequest extends FormRequest
             'image'  => ['required'],
             'explain' => ['required'],
             'price' => ['required', 'integer', 'min:1'],
-            'category_id' => ['required', 'integer'],
+            'category_id' => ['required', 'integer', Rule::exists('product_categories', 'id')->where('shop_id', Shop::ShopInfo()->id)],
         ];
     }
 }

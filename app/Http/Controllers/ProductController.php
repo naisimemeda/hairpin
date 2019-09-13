@@ -23,7 +23,7 @@ class ProductController extends Controller
         if ($search = $request->input('search', '')){
             $like = '%'.$search.'%';
             $builder->where(function ($query) use ($like){
-                $query->where('title', 'like', $like);
+                $query->where('table', 'like', $like);
             });
         }
 
