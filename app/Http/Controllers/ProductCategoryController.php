@@ -28,8 +28,14 @@ class ProductCategoryController extends Controller
      * @return mixed
      */
     public function CategoryList(Request $request){
-        $category = ProductCategory::query()->get();
-        return $this->setStatusCode(201)->success($category);
+        $pageSize = $request->input('pageSize') ?: 16;
+        $page = $pageSize * ($request->input('page') - 1);
+
+        $category = ProductCategory::query()->offset($page)->limit($pageSize)->get();
+        return $this->setStatusCode(201)->success([
+            'data' => $category,
+            'total' => count(ProductCategory::get())
+        ]);
     }
 
     public function CategoryProduct(Request $request){

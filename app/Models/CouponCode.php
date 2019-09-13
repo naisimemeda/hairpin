@@ -69,7 +69,7 @@ class CouponCode extends Model
         return $query;
     }
 
-    public function scopeWithTyoe($query, $type)
+    public function scopeWithType($query, $type)
     {
         // 不同的排序，使用不同的数据读取逻辑
         switch ($type) {
@@ -78,7 +78,7 @@ class CouponCode extends Model
                 $query->where('type', $type);
                 break;
             //percent
-            case '比例':
+            case 'percent':
                 $query->where('type', $type);
                 break;
         }

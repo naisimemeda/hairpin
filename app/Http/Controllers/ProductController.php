@@ -19,7 +19,7 @@ class ProductController extends Controller
      * @return mixed
      */
     public function index(Request $request){
-        $builder = Product::query()->where('on_sale', true);
+        $builder = Product::query()->where('on_sale', true)->where('shop_id', Shop::ShopInfo()->id);
         if ($search = $request->input('search', '')){
             $like = '%'.$search.'%';
             $builder->where(function ($query) use ($like){
@@ -29,6 +29,7 @@ class ProductController extends Controller
 
         $pageSize = $request->input('pageSize') ?: 16;
         $page = $pageSize * ($request->input('page') - 1);
+
         $builder->withCount(['card']);
         $products = $builder->offset($page)->limit($pageSize)->get();
         return $this->setStatusCode(201)->success([
@@ -52,6 +53,7 @@ class ProductController extends Controller
                'explain' => $request->input('explain'),
                 //取商品sku 金额最小的值
                'price' => $request->input('price'),
+               'on_sale' => true
             ]);
             //获取当前登陆商家
             $shop = Shop::ShopInfo();

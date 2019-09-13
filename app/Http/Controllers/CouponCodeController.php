@@ -20,9 +20,9 @@ class CouponCodeController extends Controller
             $end_time = $request->input('end_time');
             $builder->whereBetween('created_at', [$start_time, $end_time]);
         }
-        /* 优惠券类型
-            1:未使用
-            2:已使用
+        /* 优惠券类型  固定金额 比例
+            1:固定金额
+            2:比例
         */
         if($status = $request->input('type')){
             $builder->withType($status);
@@ -40,8 +40,14 @@ class CouponCodeController extends Controller
             $builder->where('code', 'like', $like);
         }
 
-        $result =  $builder->paginate(16);
-        return $this->setStatusCode(201)->success($result);
+        $pageSize = $request->input('pageSize') ?: 16;
+        $page = $pageSize * ($request->input('page') - 1);
+
+        $result =  $builder->offset($page)->limit($pageSize)->get();
+        return $this->setStatusCode(201)->success([
+            'data' => $result,
+            'total' => count($builder->get())
+        ]);
     }
 
     public function store(CouponCodeRequest $request){

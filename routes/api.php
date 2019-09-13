@@ -16,12 +16,12 @@ Route::middleware('cors')->group(function () {
         //添加商品分类
         Route::post('product/category', 'ProductCategoryController@store')->name('product.category');
         //分类列表
-        Route::get('category/list', 'ProductCategoryController@CategoryList')->name('category.list');
+        Route::post('category/list', 'ProductCategoryController@CategoryList')->name('category.list');
         //分类下的商品
         Route::get('category/product', 'ProductCategoryController@CategoryProduct')->name('category.product');
 
         //商品列表
-        Route::get('product/list', 'ProductController@index')->name('product.index');
+        Route::post('product/list', 'ProductController@index')->name('product.index');
 
         //添加商品
         Route::post('product', 'ProductController@store')->name('product.store');
@@ -33,13 +33,13 @@ Route::middleware('cors')->group(function () {
         //添加卡密
         Route::post('card', 'CardController@store')->name('card.store');
         //查看统计的卡密
-        Route::get('product/list/card', 'CardController@ProductCard')->name('card.product_card');
+        Route::post('product/list/card', 'CardController@ProductCard')->name('card.product_card');
         //删除卡密
         Route::delete('card', 'CardController@delete')->name('card.delete');
         //查看卡密
-        Route::get('card', 'CardController@index')->name('card.index');
+        Route::post('card/list', 'CardController@index')->name('card.index');
         //优惠券列表
-        Route::get('coupon_code', 'CouponCodeController@index')->name('coupon_code.index');
+        Route::post('coupon_code/list', 'CouponCodeController@index')->name('coupon_code.index');
         //添加优惠券
         Route::post('coupon_code', 'CouponCodeController@store')->name('coupon_code.store');
     });
