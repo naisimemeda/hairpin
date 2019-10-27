@@ -24,20 +24,22 @@ class ShopController extends Controller
         $phone = $request->phone;
         // 生成4位随机数，左侧补0
         $code = str_pad(random_int(1, 9999), 4, 0, STR_PAD_LEFT);
-        if (!app()->environment('production')) {
-            $code = '1234';
-        } else {
-            try {
-                $xhySms->send($phone, [
-                    'template' => 'SMS_163853034',
-                    'data' => [
-                        'code' => $code   //变量名
-                    ]
-                ], 'aliyun');
-            } catch (\Exception $exception) {
-                return $this->failed('短信发送异常', 403);
-            }
-        }
+        $code = '1234';
+
+//        if (!app()->environment('production')) {
+//            $code = '1234';
+//        } else {
+//            try {
+//                $xhySms->send($phone, [
+//                    'template' => 'SMS_163853034',
+//                    'data' => [
+//                        'code' => $code   //变量名
+//                    ]
+//                ], 'aliyun');
+//            } catch (\Exception $exception) {
+//                return $this->failed('短信发送异常', 403);
+//            }
+//        }
 
         $key = 'verificationCode_' . str_random(15);
         $expiredAt = now()->addMinutes(10);
