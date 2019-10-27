@@ -11,7 +11,8 @@ use Nice\XhySms\XhySms;
 
 class ShopController extends Controller
 {
-    public function verificationCodes(Request $request, XhySms $xhySms){
+    public function verificationCodes(Request $request, XhySms $xhySms)
+    {
 
         $request->validate([
             'phone' => [
@@ -25,9 +26,9 @@ class ShopController extends Controller
         $code = str_pad(random_int(1, 9999), 4, 0, STR_PAD_LEFT);
         if (!app()->environment('production')) {
             $code = '1234';
-        }else {
+        } else {
             try {
-                $xhySms->send($phone,  [
+                $xhySms->send($phone, [
                     'template' => 'SMS_163853034',
                     'data' => [
                         'code' => $code   //变量名
@@ -38,7 +39,7 @@ class ShopController extends Controller
             }
         }
 
-        $key = 'verificationCode_'.str_random(15);
+        $key = 'verificationCode_' . str_random(15);
         $expiredAt = now()->addMinutes(10);
         // 缓存验证码 10分钟过期。
         Cache::put($key, ['phone' => $phone, 'code' => $code], $expiredAt);
@@ -48,7 +49,8 @@ class ShopController extends Controller
         ]);
     }
 
-    public function store(ShopRequest $request){
+    public function store(ShopRequest $request)
+    {
         $verifyData = Cache::get($request->verification_key);
 
         if (!$verifyData) {
@@ -60,7 +62,7 @@ class ShopController extends Controller
 
         $is_shop = Shop::query()->where('phone', $verifyData['phone'])->exists();
 
-        if ($is_shop){
+        if ($is_shop) {
             return $this->failed('重复注册');
         }
 
@@ -76,7 +78,8 @@ class ShopController extends Controller
         return $this->setStatusCode(201)->success('成功');
     }
 
-    public function PhoneLogin(Request $request){
+    public function PhoneLogin(Request $request)
+    {
 
         $request->validate([
             'phone' => [
@@ -101,6 +104,21 @@ class ShopController extends Controller
         Cache::forget($request->verification_key);
 
         $token = Auth::guard('shop')->login($shop);
+
+        return $this->setStatusCode(201)->success([
+            'token' => 'bearer ' . $token
+        ]);
+    }
+
+
+    public function Login(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'password' => 'required',
+        ]);
+
+        $token = Auth::guard('shop')->attempt(['name' => $request->get('name'), 'password' => $request->get('password')]);
 
         return $this->setStatusCode(201)->success([
             'token' => 'bearer ' . $token
