@@ -33,7 +33,7 @@ class ShopController extends Controller
                     'data' => [
                         'code' => $code   //变量名
                     ]
-                ], 'aliyun');
+                ], 'aliyuns');
             } catch (\Exception $exception) {
                 return $this->failed('短信发送异常', 401);
             }
