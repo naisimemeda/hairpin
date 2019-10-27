@@ -29,11 +29,12 @@ class ShopController extends Controller
         } else {
             try {
                 $xhySms->send($phone, [
-                    'template' => 'SMS_163853034',
+                    'template' => 'SMS_163853034dasdasd',
                     'data' => [
                         'code' => $code   //变量名
                     ]
-                ], 'aliyuns');
+                ], 'aliyun');
+                dd($aaa);
             } catch (\Exception $exception) {
                 return $this->failed('短信发送异常', 401);
             }
