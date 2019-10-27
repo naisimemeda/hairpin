@@ -19,7 +19,6 @@ class OrdersController extends Controller
 {
     public function store(OrderRequest $request){
         $amount = $request->input('amount');
-
         $coupon  = null;
         if ($code = $request->input('coupon_code')) {
             $coupon = CouponCode::where('code', $code)->where('shop_id', Shop::ShopInfo()->id)->first();

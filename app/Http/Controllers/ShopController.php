@@ -95,8 +95,7 @@ class ShopController extends Controller
             return $this->failed('验证码错误', 401);
         }
 
-        $shop = Shop::where('phone', $verifyData['phone'])->first();
-
+        $shop = Shop::query()->where('phone', $verifyData['phone'])->firstOrFail();
 
         // 清除验证码缓存
         Cache::forget($request->verification_key);
