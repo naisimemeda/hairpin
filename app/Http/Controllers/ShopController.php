@@ -29,14 +29,13 @@ class ShopController extends Controller
         } else {
             try {
                 $xhySms->send($phone, [
-                    'template' => 'SMS_163853034dasdasd',
+                    'template' => 'SMS_163853034',
                     'data' => [
                         'code' => $code   //变量名
                     ]
                 ], 'aliyun');
-                dd($aaa);
             } catch (\Exception $exception) {
-                return $this->failed('短信发送异常', 401);
+                return $this->failed('短信发送异常', 403);
             }
         }
 
@@ -55,10 +54,10 @@ class ShopController extends Controller
         $verifyData = Cache::get($request->verification_key);
 
         if (!$verifyData) {
-            return $this->failed('验证码已失效', 422);
+            return $this->failed('验证码已失效', 403);
         }
         if (!hash_equals($verifyData['code'], $request->verification_code)) {
-            return $this->failed('验证码错误', 401);
+            return $this->failed('验证码错误', 403);
         }
 
         $is_shop = Shop::query()->where('phone', $verifyData['phone'])->exists();
@@ -91,12 +90,12 @@ class ShopController extends Controller
 
         $verifyData = Cache::get($request->verification_key);
         if (!$verifyData) {
-            return $this->failed('验证码已失效', 422);
+            return $this->failed('验证码已失效', 403);
         }
 
         if (!hash_equals($verifyData['code'], $request->verification_code)) {
             // 返回401
-            return $this->failed('验证码错误', 401);
+            return $this->failed('验证码错误', 403);
         }
 
         $shop = Shop::query()->where('phone', $verifyData['phone'])->firstOrFail();
