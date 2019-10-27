@@ -59,7 +59,7 @@ class Handler extends ExceptionHandler
                 $message = $val[$keys];
                 break;
             }
-            return response()->json(['code' => 1001, 'status' => $message, 'data' => []], 422);
+            return response()->json(['code' => 422, 'status' => 111, 'data' => $message], 422);
         }
         return parent::render($request, $exception);
     }
