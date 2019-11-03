@@ -79,8 +79,8 @@ class CardController extends Controller
             $no_key = explode('|', $card);
             $data[] = [
                 //去除卡号.卡密中的空格
-                'card_no' => str_replace(' ','',$no_key[0]),
-                'card_key' => str_replace(' ','',$no_key[1]),
+                'card_no' => str_replace(' ', '', $no_key[0]),
+                'card_key' => str_replace(' ', '', $no_key[1]),
                 'product_id' => $request->input('product_id'),
                 'shop_id' => $shop_id,
                 'created_at' => Carbon::now(),
