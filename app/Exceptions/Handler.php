@@ -2,9 +2,13 @@
 
 namespace App\Exceptions;
 
+use App\Common\Toast;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -49,6 +53,12 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
 
+        if($exception instanceof NotFoundHttpException){
+            if($exception->getStatusCode() == 404) {
+                return response()->json(['code' => 404, 'status' => "error", 'message' => ' '], 404);
+            }
+        }
+
         if ($exception instanceof ValidationException) {
             // 只读取错误中的第一个错误信息
             $errors  = $exception->errors();
@@ -61,6 +71,15 @@ class Handler extends ExceptionHandler
             }
             return response()->json(['code' => 422, 'status' => "error", 'message' => $message], 422);
         }
+
+        if ($exception instanceof AuthorizationException) {
+            return Response()->json(['message' => '没有该权限'], 403);
+        }
+
+        if ($exception instanceof ModelNotFoundException) {
+            return Response()->json(['message' => '不要搞事情哦'], 403);
+        }
+
         return parent::render($request, $exception);
     }
 

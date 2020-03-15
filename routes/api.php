@@ -10,9 +10,10 @@ Route::middleware('cors')->group(function () {
         //注册
         Route::post('store', 'ShopController@store')->name('shop.store');
         //手机登陆
-        Route::post('authorization', 'ShopController@PhoneLogin')->name('phone.login');
+        Route::post('authorization-phone', 'ShopController@PhoneLogin')->name('phone.login');
         //账户登录
-        Route::post('admin/authorization', 'ShopController@Login')->name('name.login');
+        Route::post('authorization', 'ShopController@Login')->name('name.login');
+
         Route::post('phone', 'ShopController@info')->name('shop.info');
         //添加商品分类
         Route::post('product/category', 'ProductCategoryController@store')->name('product.category');
