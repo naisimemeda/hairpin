@@ -9,3 +9,10 @@ function ngrok_url($routeName, $parameters = [])
 
     return route($routeName, $parameters);
 }
+
+
+function objToArr($obj)
+{
+    //先编码成json字符串，再解码成数组
+    return json_decode(json_encode($obj), true);
+}

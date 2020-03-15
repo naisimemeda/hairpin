@@ -1,5 +1,6 @@
 <?php
 namespace App\Api\Helpers;
+use Illuminate\Database\Query\Builder;
 use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 use Response;
 
@@ -128,5 +129,22 @@ trait ApiResponse
     public function notFond($message = 'Not Fond!')
     {
         return $this->failed($message,Foundationresponse::HTTP_NOT_FOUND);
+    }
+
+
+    /**
+     * @param Builder $builder
+     * @return array
+     */
+    public function result($builder) : array
+    {
+        $size   = request()->get('pageSize', 16);
+
+        $result = objToArr($builder->latest('id')->paginate($size));
+
+        $record = $result['data'];
+        $total  = $result['total'];
+
+        return compact('record', 'total');
     }
 }

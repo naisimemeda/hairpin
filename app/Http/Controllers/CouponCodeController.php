@@ -16,10 +16,12 @@ class CouponCodeController extends Controller
 {
     public function index(Request $request){
         $builder = CouponCode::query();
+
         if($start_time = $request->input('start_time')){
             $end_time = $request->input('end_time');
             $builder->whereBetween('created_at', [$start_time, $end_time]);
         }
+
         /* 优惠券类型  固定金额 比例
             1:固定金额
             2:比例
@@ -27,6 +29,7 @@ class CouponCodeController extends Controller
         if($status = $request->input('type')){
             $builder->withType($status);
         }
+
         /*通过scope 筛选出相应数据
             1:未使用
             2:已使用
@@ -34,20 +37,16 @@ class CouponCodeController extends Controller
         if($status = $request->input('status')){
             $builder->withStatus($status);
         }
+
         //查询优惠券
         if ($search = $request->input('search')){
             $like = '%'.$search.'%';
             $builder->where('code', 'like', $like);
         }
 
-        $pageSize = $request->input('pageSize') ?: 16;
-        $page = $pageSize * ($request->input('page') - 1);
+        $result =  $this->result($builder);
 
-        $result =  $builder->offset($page)->limit($pageSize)->get();
-        return $this->setStatusCode(201)->success([
-            'data' => $result,
-            'total' => count($builder->get())
-        ]);
+        return $this->setStatusCode(201)->success($result);
     }
 
     public function store(CouponCodeRequest $request){

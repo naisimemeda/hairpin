@@ -20,22 +20,19 @@ class ProductController extends Controller
      */
     public function index(Request $request){
         $builder = Product::query()->where('on_sale', true)->where('shop_id', Shop::ShopInfo()->id);
-        if ($search = $request->input('search', '')){
+
+        if ($search = $request->input('search')){
             $like = '%'.$search.'%';
             $builder->where(function ($query) use ($like){
                 $query->where('table', 'like', $like);
             });
         }
 
-        $pageSize = $request->input('pageSize') ?: 16;
-        $page = $pageSize * ($request->input('page') - 1);
-
         $builder->withCount(['card']);
-        $products = $builder->offset($page)->limit($pageSize)->get();
-        return $this->setStatusCode(201)->success([
-            'data' => $products,
-            'total' => count($builder->get())
-        ]);
+
+        $result =  $this->result($builder);
+
+        return $this->setStatusCode(201)->success($result);
     }
 
 

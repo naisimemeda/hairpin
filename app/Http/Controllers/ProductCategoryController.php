@@ -33,11 +33,11 @@ class ProductCategoryController extends Controller
         $pageSize = $request->input('pageSize') ?: 16;
         $page = $pageSize * ($request->input('page') - 1);
 
-        $category = ProductCategory::query()->where('shop_id', Shop::ShopInfo()->id)->offset($page)->limit($pageSize)->get();
-        return $this->setStatusCode(201)->success([
-            'data' => $category,
-            'total' => count(ProductCategory::get())
-        ]);
+        $category = ProductCategory::query()->where('shop_id', Shop::ShopInfo()->id);
+
+        $result =  $this->result($category);
+
+        return $this->setStatusCode(201)->success($result);
     }
 
     public function CategoryProduct(Request $request){

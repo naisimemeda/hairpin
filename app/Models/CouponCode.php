@@ -48,7 +48,7 @@ class CouponCode extends Model
             // 生成一个指定长度的随机字符串，并转成大写
             $code = strtoupper(Str::random($length));
             // 如果生成的码已存在就继续循环
-        } while (self::query()->where('code', $code)->where('shop_id', Shop::ShopInfo()->id)->exists());
+        } while (self::query()->where('code', $code)->exists());
 
         return $code;
     }
@@ -75,11 +75,11 @@ class CouponCode extends Model
         switch ($type) {
             //固定金额
             case 'fixed':
-                $query->where('type', $type);
+                $query->where('type', 'fixed');
                 break;
             //percent
             case 'percent':
-                $query->where('type', $type);
+                $query->where('type', 'percent');
                 break;
         }
         return $query;

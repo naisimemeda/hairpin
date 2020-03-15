@@ -21,7 +21,7 @@ class OrdersController extends Controller
         $amount = $request->input('amount');
         $coupon  = null;
         if ($code = $request->input('coupon_code')) {
-            $coupon = CouponCode::where('code', $code)->where('shop_id', Shop::ShopInfo()->id)->first();
+            $coupon = CouponCode::where('code', $code)->first();
             if (!$coupon) {
                 throw new InvalidRequestException('优惠券不存在');
             }
