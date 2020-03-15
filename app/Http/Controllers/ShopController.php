@@ -117,11 +117,11 @@ class ShopController extends Controller
     public function Login(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|exists:shops,name',
             'password' => 'required',
         ]);
 
-        $token = Auth::guard('shop')->attempt(['name' => $request->get('name'), 'password' => $request->get('password')]);
+        $token = Auth::guard('api')->attempt(['name' => $request->get('name'), 'password' => $request->get('password')]);
 
 
         return $this->setStatusCode(201)->success([

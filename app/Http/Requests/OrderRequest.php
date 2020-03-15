@@ -13,6 +13,7 @@ class OrderRequest extends FormRequest
         return [
             'amount' => ['required', 'integer', 'min:1'],
             'phone'  => 'required',
+            'product_id'  => 'required|exists:products,id',
         ];
     }
 }

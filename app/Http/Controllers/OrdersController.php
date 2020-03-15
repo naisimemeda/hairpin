@@ -28,7 +28,7 @@ class OrdersController extends Controller
             $coupon->checkAvailable();
         }
 
-        $product    = Product::query()->find($request->input('product_id'));
+        $product = Product::query()->find($request->input('product_id'));
 
         $card = $product->whereHas('card', function ($query) use($product){
             $query->where('product_id', $product->id)->where('status', true);
@@ -49,7 +49,7 @@ class OrdersController extends Controller
                     'email'        => $request->input('email'),
                 ]);
                 $order->product()->associate($product->id);
-                $order->shop()->associate($request->input('shop_id'));
+                $order->shop()->associate($product->shop_id);
                 $order->save();
                 if ($coupon) {
                     // 把订单金额修改为优惠后的金额

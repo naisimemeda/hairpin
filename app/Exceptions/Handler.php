@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -54,9 +55,13 @@ class Handler extends ExceptionHandler
     {
 
         if($exception instanceof NotFoundHttpException){
-            if($exception->getStatusCode() == 404) {
-                return response()->json(['code' => 404, 'status' => "error", 'message' => ' '], 404);
-            }
+            return response()->json(['code' => 404, 'status' => "error", 'message' => '没有找到该页面'], 404);
+
+        }
+
+        if($exception instanceof UnauthorizedHttpException){
+            dd($exception);
+            return response()->json(['message' => '未登录或登录状态失效'], 403);
         }
 
         if ($exception instanceof ValidationException) {
@@ -73,11 +78,11 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof AuthorizationException) {
-            return Response()->json(['message' => '没有该权限'], 403);
+            return response()->json(['message' => '没有该权限'], 403);
         }
 
         if ($exception instanceof ModelNotFoundException) {
-            return Response()->json(['message' => '不要搞事情哦'], 403);
+            return response()->json(['message' => '不要搞事情哦'], 403);
         }
 
         return parent::render($request, $exception);

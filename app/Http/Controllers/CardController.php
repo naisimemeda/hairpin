@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class CardController extends Controller
 {
     public function index(Request $request){
-        $builder = Card::query();
+        $builder = Card::query()->where('shop_id', Shop::ShopInfo()->id);
 
         if($start_time = $request->input('start_time')){
             $end_time = $request->input('end_time');
@@ -39,7 +39,6 @@ class CardController extends Controller
             $builder->where('card_no', 'like', $like);
         }
 
-        $pageSize = $request->input('pageSize') ?: 16;
 
         $result =  $this->result($builder);
 
