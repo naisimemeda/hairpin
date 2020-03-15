@@ -82,13 +82,13 @@ class ShopController extends Controller
 
     public function PhoneLogin(Request $request)
     {
-
-        $request->validate([
-            'phone' => [
-                'required',
-                'regex:/^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199)\d{8}$/',
-            ]
-        ]);
+//
+//        $request->validate([
+//            'phone' => [
+//                'required',
+//                'regex:/^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199)\d{8}$/',
+//            ]
+//        ]);
 
         $verifyData = Cache::get($request->verification_key);
 
@@ -123,9 +123,6 @@ class ShopController extends Controller
 
         $token = Auth::guard('shop')->attempt(['name' => $request->get('name'), 'password' => $request->get('password')]);
 
-        if (! $token) {
-            return $this->failed('账号或密码错误');
-        }
 
         return $this->setStatusCode(201)->success([
             'token' => 'bearer ' . $token

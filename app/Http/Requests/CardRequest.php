@@ -25,6 +25,7 @@ class CardRequest extends FormRequest
                             },
                             Rule::exists('products', 'id')->where('shop_id', Shop::ShopInfo()->id),
                         ],
+                        'cards' => 'required'
                     ];
                 }
             case 'DELETE':

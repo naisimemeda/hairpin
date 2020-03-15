@@ -71,9 +71,12 @@ class CardController extends Controller
     }
 
     public function store(CardRequest $request){
-        $data = [];
         $shop_id = Shop::ShopInfo()->id;
-        $cards  = explode(',', str_replace("\n",",", $request->input('cards') ? : $a));
+
+        $cards  = explode(',', str_replace("\n",",", $request->input('cards')));
+
+        $data = [];
+        $now  = Carbon::now();
 
         foreach ($cards as $card){
             $no_key = explode('|', $card);
@@ -83,11 +86,12 @@ class CardController extends Controller
                 'card_key' => str_replace(' ', '', $no_key[1]),
                 'product_id' => $request->input('product_id'),
                 'shop_id' => $shop_id,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+                'created_at' => $now,
+                'updated_at' => $now,
             ] ;
         }
-        Card::insert($data);
+
+        Card::query()->insert($data);
         return $this->setStatusCode(201)->success('成功');
     }
 
