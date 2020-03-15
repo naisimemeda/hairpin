@@ -90,12 +90,13 @@ class ShopController extends Controller
             ]
         ]);
 
-        $verifyData = Cache::get();
+        $verifyData = Cache::get($request->verification_key);
+
         if (!$verifyData) {
             return $this->failed('验证码已失效', 403);
         }
 
-        if (!hash_equals($verifyData['code'], $request->get('verification_code'))) {
+        if (!hash_equals($verifyData['code'], $request->verification_code)) {
             // 返回401
             return $this->failed('验证码错误', 403);
         }
@@ -103,13 +104,9 @@ class ShopController extends Controller
         $shop = Shop::query()->where('phone', $verifyData['phone'])->firstOrFail();
 
         // 清除验证码缓存
-        Cache::forget($request->get('verification_key'));
+        Cache::forget($request->verification_key);
 
         $token = Auth::guard('shop')->login($shop);
-
-        if (! $token) {
-            return $this->failed('账号或密码错误');
-        }
 
         return $this->setStatusCode(201)->success([
             'token' => 'bearer ' . $token
