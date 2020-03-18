@@ -54,7 +54,7 @@ class CouponCodeController extends Controller
         $length = $request->input('length');
         $coupon = [];
         $shop_id = Shop::ShopInfo()->id;
-        for ($i = 0; $length >= $i; $i++){
+        for ($i = 0; $length > $i; $i++){
             $coupon[] = [
                 'shop_id' => $shop_id,
                 //生成不重复优惠码

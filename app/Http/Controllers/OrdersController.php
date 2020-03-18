@@ -63,7 +63,7 @@ class OrdersController extends Controller
                     // 更新订单总金额
                     $order->update(['total_amount' => $total_amount]);
                 }
-                $this->dispatch(new CloseOrder($order, config('app.order_ttl')));
+                $this->dispatch(new CloseOrder($order, 30));
                 return $order;
             });
         }catch (\Exception $exception){

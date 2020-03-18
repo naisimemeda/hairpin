@@ -97,13 +97,8 @@ class CardController extends Controller
     public function delete(CardRequest $request){
         $status = $request->input('type');
 
-        $card = Card::query()->where('product_id', $request->input('product_id'));
-        /*通过scope 筛选出相应数据
-            1:未卖出的卡密
-            2:已卖出的卡密
-            3:全部
-        */
-        $card->withStatus($status)->delete();
+        Card::query()->where('product_id', $request->input('product_id'))->where('status', $status)->delete();
+
         return $this->setStatusCode(201)->success('成功');
     }
 }

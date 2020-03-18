@@ -121,7 +121,7 @@ class ShopController extends Controller
             'password' => 'required',
         ]);
 
-        $token = Auth::guard('api')->attempt(['name' => $request->get('name'), 'password' => $request->get('password')]);
+        $token = Auth::guard('shop')->attempt(['name' => $request->get('name'), 'password' => $request->get('password')]);
 
 
         return $this->setStatusCode(201)->success([
