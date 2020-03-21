@@ -16,6 +16,12 @@ use Nice\XhySms\XhySms;
 
 class PaymentController extends Controller
 {
+    /**
+     * @param Order $order
+     * @param Request $request
+     * @return mixed
+     * @throws InvalidRequestException
+     */
     public function payByAlipay(Order $order, Request $request)
     {
         // 订单已支付或者已关闭

@@ -21,9 +21,11 @@ Route::middleware('cors')->group(function () {
             //添加商品分类
             Route::post('product/category', 'ProductCategoryController@store')->name('product.category');
             //分类列表
-            Route::post('category/list', 'ProductCategoryController@CategoryList')->name('category.list');
-            //分类下的商品
-            Route::get('category/product', 'ProductCategoryController@CategoryProduct')->name('category.product');
+            Route::get('category/list', 'ProductCategoryController@CategoryList')->name('category.list');
+            //修改分类
+            Route::put('category/{product_category}/update', 'ProductCategoryController@update')->name('category.update');
+            //删除分类
+            Route::delete('category/{product_category}/delete', 'ProductCategoryController@delete')->name('category.delete');
 
             //商品列表
             Route::post('product/list', 'ProductController@index')->name('product.index');

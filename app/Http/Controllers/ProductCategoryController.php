@@ -17,7 +17,9 @@ class ProductCategoryController extends Controller
      */
     public function store(ProductCategoryRequest $request){
         ProductCategory::query()->create([
-            'name' => $request->input('name'),
+            'name'   => $request->input('name'),
+            'status' => $request->input('status'),
+            'sort'   => $request->input('sort'),
             'shop_id' => Shop::ShopInfo()->id
         ]);
 
@@ -30,18 +32,29 @@ class ProductCategoryController extends Controller
      * @return mixed
      */
     public function CategoryList(Request $request){
-        $pageSize = $request->input('pageSize') ?: 16;
-        $page = $pageSize * ($request->input('page') - 1);
 
-        $category = ProductCategory::query()->where('shop_id', Shop::ShopInfo()->id);
+        $category = ProductCategory::query()->withCount(['product'])->where('shop_id', Shop::ShopInfo()->id);
 
         $result =  $this->result($category);
 
         return $this->setStatusCode(201)->success($result);
     }
 
-    public function CategoryProduct(Request $request){
-        $category =  ProductCategory::with(['product:id,table,category_id'])->where('shop_id', Shop::ShopInfo()->id)->get();
-        return $this->setStatusCode(201)->success($category);
+
+    public function update(ProductCategory $category, ProductCategoryRequest $request)
+    {
+
+        $category->update($request->only(['name', 'status', 'sort']));
+
+        return $this->setStatusCode(201)->success('成功');
+
+    }
+
+    public function delete(ProductCategory $category)
+    {
+
+        $category->delete();
+        return $this->setStatusCode(201)->success('成功');
+
     }
 }

@@ -60,7 +60,6 @@ class Handler extends ExceptionHandler
         }
 
         if($exception instanceof UnauthorizedHttpException){
-            dd($exception);
             return response()->json(['message' => '未登录或登录状态失效'], 403);
         }
 
