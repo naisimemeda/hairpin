@@ -80,6 +80,13 @@ class ShopController extends Controller
         return $this->setStatusCode(201)->success('成功');
     }
 
+
+    public function show(Request $request)
+    {
+        return $this->success(Shop::ShopInfo());
+    }
+
+
     public function PhoneLogin(Request $request)
     {
 //

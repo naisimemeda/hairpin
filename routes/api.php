@@ -18,6 +18,10 @@ Route::middleware('cors')->group(function () {
 
 
         Route::middleware('api.shop.auth')->group(function () {
+
+            Route::post('show', 'ShopController@show')->name('shop.show');
+
+
             //添加商品分类
             Route::post('product/category', 'ProductCategoryController@store')->name('product.category');
             //分类列表
