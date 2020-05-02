@@ -16,9 +16,13 @@ services:
       - DB_PASSWORD=123456
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - TZ=Asia/Shanghai
+    ports:
+      - "9000:9000"
+
 
   database:
-    image: mysql
+    image: mysql:8
     restart: always
     volumes:
       - hairpin_mysql_data:/var/lib/mysql:rw
@@ -30,21 +34,25 @@ services:
       - 33306:3306
 
   redis:
-    image: redis:5
-    # 开发环境需取消端口调试开放
+    build:
+      context: ./docker
+      dockerfile: redis.dockerfile
     ports:
       - 63799:6379
 
-  web:
+  proxy:
     build:
       context: ./docker
       dockerfile: nginx.dockerfile
-    working_dir: /var/www
     volumes:
-      - ./public:/var/www/public
+      - ./:/var/www/:cached
     # 开发环境需取消端口调试开放
     ports:
-      - 8888:80
+      - 80:80
+    links:
+      - laravel
+    working_dir: "/var/www"
+    restart: "no"
 
 volumes:
   hairpin_mysql_data:
